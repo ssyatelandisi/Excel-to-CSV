@@ -19,7 +19,7 @@ def main():
         there_is_csv = True
     finally:
         if not there_is_csv:
-            print("\n转换结束，请查看csv目录")
+            print("运行结束，转换结果请看csv目录")
         input("按Enter键退出窗口\n")
 
 
