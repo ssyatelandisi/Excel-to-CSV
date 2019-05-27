@@ -4,7 +4,7 @@
 
 Transcoding "excel" to "csv"
 
-First the current path cannot exist in the csv directory.Then run the exe program, you can convert all excel files with less than 65536 lines in the same path into csv files in the generated csv directory.
+First the current path cannot exist the csv directory.Then run the exe program, you can convert all excel files with less than 65536 lines in the same path into csv files in the generated csv directory.
 
 # 中文说明
 
