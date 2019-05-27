@@ -20,7 +20,7 @@ def main():
     finally:
         if not there_is_csv:
             print("\n转换结束，请查看csv目录")
-        input("按任意键退出窗口\n")
+        input("按Enter键退出窗口\n")
 
 
 def transcoding(file_name):
