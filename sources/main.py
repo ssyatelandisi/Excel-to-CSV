@@ -1,6 +1,8 @@
+from icon import img
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+import base64
 import os
 import sys
 import xlrd
@@ -28,6 +30,8 @@ def openFiles(data):
     else:
         pass
     if file_names:
+        tk_opened_file_names.set('')
+        result_info.set('')
         data['files']=[]
         data['names']=[]
         for item in file_names:
@@ -46,6 +50,8 @@ def openFiles(data):
 def saveDirectory(data):
     save_directory=filedialog.askdirectory()
     if save_directory:
+        tk_save_directory.set('')
+        result_info.set('')
         data['save_directory']=save_directory
         tk_save_directory.set(data['save_directory'])
     check(data)
@@ -61,21 +67,24 @@ def check(data):
 def starcheck(data):
     list=[]
     if data['mode']==0:
-        for files_names in data['names']:
-            if os.path.isfile(os.path.join(data['save_directory'],files_names+'.csv')):
+        for file_names in data['names']:
+            if os.path.isfile(os.path.join(data['save_directory'],file_names+'.csv')):
                 list.append(file_names+'.csv')
         info(list)
     elif data['mode']==1:
-        for files_names in data['names']:
-            if os.path.isfile(os.path.join(data['save_directory'],files_names+'.xls')):
+        for file_names in data['names']:
+            if os.path.isfile(os.path.join(data['save_directory'],file_names+'.xls')):
                 list.append(file_names+'.xls')
         info(list)
 def info(files):
     if len(files)>1:
-        result=messagebox.askyesno(title='文件已存在',message=files[0]+' 等'+len(list)+'个文件已存在\n是否继续？',default='yes')
+        files_check_result=messagebox.askyesno(title='文件已存在',message=files[0]+' 等'+str(len(files))+'个文件已存在\n是否继续？',default='yes')
+    elif len(files)==1:
+        files_check_result=messagebox.askyesno(title='文件已存在',message=files[0]+' 文件已存在\n是否继续？',default='yes')
     else:
-        result=messagebox.askyesno(title='文件已存在',message=files[0]+' 文件已存在\n是否继续？',default='yes')
-    if result:
+        convert(data)
+        return None
+    if files_check_result:
         # 转换
         convert(data)
     else:
@@ -130,6 +139,9 @@ def clean(data):
 def openWeb():
     webbrowser.open_new('https://github.com/ssyatelandisi/Excel-to-CSV')
 # GUI界面
+tmp = open("tmp.ico","wb+")
+tmp.write(base64.b64decode(img))
+tmp.close()
 # def main()
 data={'mode':0,'files':[],'names':[],'open_directory':'','open_filenames':[],'save_directory':'','ready':'no','result':''}
 root=tk.Tk()
@@ -138,7 +150,8 @@ menubar=tk.Menu(root)
 root.geometry("500x310")
 root.resizable(width=False, height=False)
 #ico要填写绝对路劲
-# root.iconbitmap(r"C:\icon.ico")
+root.iconbitmap("tmp.ico")
+os.remove("tmp.ico")
 file_menu = tk.Menu(menubar, tearoff=False)
 mode=tk.IntVar(value=0)
 file_menu.add_radiobutton(label="EXCEL转CSV", variable=mode, value=0,command=lambda param=data,mode=0:setMode(data,mode))
@@ -167,7 +180,7 @@ tk.Entry(frame_main,width=40,textvariable=tk_save_directory).grid(row=2,column=1
 tk.Button(frame_main,text="浏览", width=6,command=lambda:saveDirectory(data)).grid(row=2,column=2)
 frame_main.pack()
 frame_button=tk.Frame(root, pady=5)
-tk_start_button=tk.Button(frame_button,text="开始转换",command=lambda param=data:convert(param))
+tk_start_button=tk.Button(frame_button,text="开始转换",command=lambda param=data:starcheck(param))
 tk_start_button.config(state=tk.DISABLED)
 tk_start_button.grid(row=0,column=0, padx=5, pady=5)
 tk.Button(frame_button,text="清空内容",command=lambda:clean(data)).grid(row=0,column=1, padx=5, pady=5)

@@ -1,1 +1,1 @@
-pyinstaller -F -c -i=sources/icon.ico sources/main.py -n=Excel-to-CSV.exe
+pyinstaller -F -w -i=sources/icon.ico sources/main.py -n=Excel-CSV.exe
